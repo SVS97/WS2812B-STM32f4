@@ -4,21 +4,21 @@
 
 #define LED_PWM (1 << 15) 		/* port D, pin 15 */
 #define LEDC			93					// Should be 1 or greater
-#define PORTOUT			GPIOD				// порт дл€ WS2812B
-#define ClearOutBit		(PORTOUT->ODR = 0); //0 на выход
-#define SetOutBit		(PORTOUT->ODR = LED_PWM);   //1 на выход
+#define PORTOUT			GPIOD				// port for WS2812B
+#define ClearOutBit		(PORTOUT->ODR = 0); //0 to output
+#define SetOutBit		(PORTOUT->ODR = LED_PWM);   //1  to output
 
-#define RED				0x0F				// инициализаци€ красного цвета
-#define GREEN			0xF0				// инициализаци€ зелЄного цвета
-#define BLUE			0x55				// инициализаци€ синего цвета
+#define RED				0x0F				// red initialization
+#define GREEN			0xF0				// green initialization
+#define BLUE			0x55				// blue initialization
 
 #define    DWT_CYCCNT    *(volatile unsigned long *)0xE0001004
 #define    DWT_CONTROL   *(volatile unsigned long *)0xE0001000
 #define    SCB_DEMCR     *(volatile unsigned long *)0xE000EDFC
 	
-unsigned char ledred[LEDC+1] ;		// массив красных
-unsigned char ledblue[LEDC+1] ;		// массив синих
-unsigned char ledgreen[LEDC+1];		// массив зеленых
+unsigned char ledred[LEDC+1] ;		// array of red
+unsigned char ledblue[LEDC+1] ;		// array of blue
+unsigned char ledgreen[LEDC+1];		// array of green
 
 
 static inline void setup_leds(void)
@@ -59,7 +59,7 @@ void loadWS2812B (void)
 {
 		
 	unsigned	char a,b,temp;
-	// формирование сброса
+	// reset formation
 	PORTOUT->ODR = 0;
 	__nop();
 		//--------------------------------
@@ -80,10 +80,10 @@ void loadWS2812B (void)
 				default:
 				temp = 0;
 			} 
-			// загрузка байта
+			// byte loading
 			if(temp&0x80)
 			{
-				//формирование бита 1
+				//formation of bit 1
 				SetOutBit;
 				__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();
 				ClearOutBit;
@@ -91,7 +91,7 @@ void loadWS2812B (void)
 			}
 			else
 			{
-				//формирование бита 0
+				//formation of bit 0
 				SetOutBit;
 				__nop();__nop();__nop();__nop();
 				ClearOutBit;
@@ -100,7 +100,7 @@ void loadWS2812B (void)
 			
 			if(temp&0x40)
 			{
-				//формирование бита 1
+				//formation of bit 1
 				SetOutBit;
 				__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();
 				ClearOutBit;
@@ -108,7 +108,7 @@ void loadWS2812B (void)
 			}
 			else
 			{
-				//формирование бита 0
+				//formation of bit 0
 					SetOutBit;
 				__nop();__nop();__nop();__nop();
 					ClearOutBit;
@@ -117,7 +117,7 @@ void loadWS2812B (void)
 			
 			if(temp&0x20)
 			{
-				//формирование бита 1
+				//formation of bit 1
 				SetOutBit;
 				__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();
 				ClearOutBit;
@@ -125,7 +125,7 @@ void loadWS2812B (void)
 			}
 			else
 			{
-				//формирование бита 0
+				//formation of bit 0
 					SetOutBit;
 				__nop();__nop();__nop();__nop();
 					ClearOutBit;
@@ -133,7 +133,7 @@ void loadWS2812B (void)
 			}
 			if(temp&0x10)
 			{
-				//формирование бита 1
+				//formation of bit 1
 				SetOutBit;
 				__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();
 				ClearOutBit;
@@ -141,7 +141,7 @@ void loadWS2812B (void)
 			}
 			else
 			{
-				//формирование бита 0
+				//formation of bit 0
 					SetOutBit;
 				__nop();__nop();__nop();__nop();
 					ClearOutBit;
@@ -149,7 +149,7 @@ void loadWS2812B (void)
 			}
 			if(temp&0x8)
 			{
-				//формирование бита 1
+				//formation of bit 1
 				SetOutBit;
 				__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();
 				ClearOutBit;
@@ -157,7 +157,7 @@ void loadWS2812B (void)
 			}
 			else
 			{
-				//формирование бита 0
+				//formation of bit 0
 					SetOutBit;
 				__nop();__nop();__nop();__nop();
 					ClearOutBit;
@@ -166,7 +166,7 @@ void loadWS2812B (void)
 			
 			if(temp&0x4)
 			{
-				//формирование бита 1
+				//formation of bit 1
 				SetOutBit;
 				__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();
 				ClearOutBit;
@@ -174,7 +174,7 @@ void loadWS2812B (void)
 			}
 			else
 			{
-				//формирование бита 0
+				//formation of bit 0
 					SetOutBit;
 				__nop();__nop();__nop();__nop();
 					ClearOutBit;
@@ -182,7 +182,7 @@ void loadWS2812B (void)
 			}
 			if(temp&0x2)
 			{
-				//формирование бита 1
+				//formation of bit 1
 				SetOutBit;
 				__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();
 				ClearOutBit;
@@ -190,7 +190,7 @@ void loadWS2812B (void)
 			}
 			else
 			{
-				//формирование бита 0
+				//formation of bit 1
 					SetOutBit;
 				__nop();__nop();__nop();__nop();
 					ClearOutBit;
@@ -199,7 +199,7 @@ void loadWS2812B (void)
 			
 			if(temp&0x1)
 			{
-				//формирование бита 1
+				//formation of bit 1
 				SetOutBit;
 				__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();__nop();
 				ClearOutBit;
@@ -207,7 +207,7 @@ void loadWS2812B (void)
 			}
 			else
 			{
-				//формирование бита 0
+				//formation of bit 0
 					SetOutBit;
 				__nop();__nop();__nop();__nop();
 					ClearOutBit;
@@ -225,7 +225,7 @@ void loadWS2812B (void)
 void CometWhite (void)
 {
 	
-	//движение вперЄд
+	//forward movement
 	unsigned char i = 6;
 	do
 	{	ledred[i] =    255;
@@ -259,7 +259,7 @@ void CometWhite (void)
 		loadWS2812B();
 		
 	} while (i<=LEDC);
-	//тушение оставшихс€ 4 —ƒ
+	//disabling the last 4 LED
 	ledred[LEDC-1] =   0;
 	ledblue[LEDC-1] =  0;
 	ledgreen[LEDC-1] = 0;
@@ -281,7 +281,7 @@ void CometWhite (void)
 void moveRed (void)		
 {
 	
-		//движение вперЄд
+		//forward movement
 		unsigned char i = 0;
 		do
 		{	ledred[i] =  250;
@@ -299,7 +299,7 @@ void moveRed (void)
 			
 		} while (i<=LEDC);
 		
-		//движение назад
+		//back movement
 		 i = LEDC;
 		do
 		{	ledred[i-1] = 250;
@@ -327,7 +327,7 @@ void moveRed (void)
 void MidleGreen (void)
 {
 	
-	//движение в пр€мом направлении
+	//forward movement
 	unsigned char i =15;
 	unsigned char j =15;
 	do
@@ -360,17 +360,17 @@ void MidleGreen (void)
 		
 	} while (i<LEDC);
 	while (j>=1);
-	//тушение первого и последнего —ƒ
+	//disabling last and first LED
 	ledred[0] =  0;
 	ledblue[0] = 0;
 	ledgreen[0]= 0;
 	
 	
-	ledred[29] =  0;
-	ledblue[29] = 0;
-	ledgreen[29]= 0;
+	ledred[LEDC] =  0;
+	ledblue[LEDC] = 0;
+	ledgreen[LEDC]= 0;
 		
-	//движение в обратном направлении
+	//back movement
 	i =LEDC;
 	j =0;
 	do
@@ -407,22 +407,22 @@ void MidleGreen (void)
 	while (j<14);
 	
 	
-	//тушение 14-го и 15-го —ƒ
-	ledred[14] =  0;
-	ledblue[14] = 0;
-	ledgreen[14]= 0;
+	
+	ledred[LEDC - 1] =  0;
+	ledblue[LEDC - 1] = 0;
+	ledgreen[LEDC - 1]= 0;
 	
 	
-	ledred[15] =  0;
-	ledblue[15] = 0;
-	ledgreen[15]= 0;
+	ledred[LEDC] =  0;
+	ledblue[LEDC] = 0;
+	ledgreen[LEDC]= 0;
 	
 }
 
 void moveBlue (void)
 {
 	
-	//движение вперЄд
+	//forward moving
 	unsigned char i = 2;
 	do
 	{	ledred[i] =  0;
@@ -440,7 +440,7 @@ void moveBlue (void)
 		
 	} while (i<=LEDC);
 	
-	//движение назад
+	//back moving
 	i = LEDC;
 	do
 	{	ledred[i-1] =    0;

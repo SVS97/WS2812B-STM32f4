@@ -77,6 +77,7 @@ void loadWS2812B (void)
 				break;
 				case 2 :
 				temp=ledblue[a];
+				break;
 				default:
 				temp = 0;
 			} 
@@ -226,7 +227,7 @@ void CometWhite (void)
 {
 	
 	//forward movement
-	unsigned char i = 6;
+	unsigned char i = 5;
 	do
 	{	ledred[i] =    255;
 		ledblue[i] =   255;
@@ -253,7 +254,7 @@ void CometWhite (void)
 		ledblue[i-5] =  0;
 		ledgreen[i-5] = 0;
 		
-		delay_ms(50);
+		delay_ms(80);
 		i++;
 		
 		loadWS2812B();
@@ -287,12 +288,12 @@ void moveRed (void)
 		{	ledred[i] =  250;
 			ledblue[i] =   0;
 			ledgreen[i] =  0;
-			delay_ms(50);
+			delay_ms(30);
 			
 			ledred[i-1] =  0;
 			ledblue[i-1] = 0;
 			ledgreen[i-1]= 0;
-			delay_ms(50);
+			delay_ms(30);
 			i++;
 			
 			loadWS2812B();
@@ -305,13 +306,13 @@ void moveRed (void)
 		{	ledred[i-1] = 250;
 			ledblue[i-1] =   0;
 			ledgreen[i-1] =  0;
-			delay_ms(50);
+			delay_ms(15);
 			
 			
 			ledred[i] =      0;
 			ledblue[i] =     0;
 			ledgreen[i] =    0;
-			delay_ms(50);
+			delay_ms(15);
 			i--;
 			loadWS2812B();
 			
@@ -323,17 +324,158 @@ void moveRed (void)
 	
 }
 
+void moveBlue (void)
+{
+	
+	//forward moving
+	unsigned char i = 2;
+	do
+	{	ledred[i] =  0;
+		ledblue[i] =  255;
+		ledgreen[i] =  0;
+		delay_ms(30);
+		
+		ledred[i-1] =   0;
+		ledblue[i-1] =  0;
+		ledgreen[i-1] = 0;
+		delay_ms(30);
+		i++;
+		
+		loadWS2812B();
+		
+	} while (i<=LEDC);
+	
+	//back moving
+	i = LEDC;
+	do
+	{	ledred[i-1] =    0;
+		ledblue[i-1] =  255;
+		ledgreen[i-1] =  0;
+		delay_ms(15);
+		
+		
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		delay_ms(15);
+		i--;
+		loadWS2812B();
+		
+	} while (i>=1);
+	
+	
+	
+}	
+
+void moveGreen (void)
+{
+	
+	//forward moving
+	unsigned char i = 2;
+	do
+	{	ledred[i] =  0;
+		ledblue[i] =  0;
+		ledgreen[i] =  255;
+		delay_ms(30);
+		
+		ledred[i-1] =   0;
+		ledblue[i-1] =  0;
+		ledgreen[i-1] = 0;
+		delay_ms(30);
+		i++;
+		
+		loadWS2812B();
+		
+	} while (i<=LEDC);
+	
+	//back moving
+	i = LEDC;
+	do
+	{	ledred[i-1] =    0;
+		ledblue[i-1] =  0;
+		ledgreen[i-1] =  255;
+		delay_ms(15);
+		
+		
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		delay_ms(15);
+		i--;
+		loadWS2812B();
+		
+	} while (i>=1);
+	
+	for (int i = 0; i < LEDC; i++)
+	{
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		
+
+		loadWS2812B();
+	
+	}
+}	
+
+void moveWhite (void)
+{
+		ledred[0] =  0;
+		ledblue[0] =  0;
+		ledgreen[0] =  0;
+	
+	//forward moving
+	unsigned char i = 2;
+	do
+	{	ledred[i] =  255;
+		ledblue[i] =  255;
+		ledgreen[i] =  255;
+		delay_ms(30);
+		
+		ledred[i-1] =   0;
+		ledblue[i-1] =  0;
+		ledgreen[i-1] = 0;
+		delay_ms(30);
+		i++;
+		
+		loadWS2812B();
+		
+	} while (i<=LEDC);
+	
+	//back moving
+	i = LEDC;
+	do
+	{	ledred[i-1] =    255;
+		ledblue[i-1] =  255;
+		ledgreen[i-1] =  255;
+		delay_ms(15);
+		
+		
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		delay_ms(15);
+		i--;
+		loadWS2812B();
+		
+	} while (i>=1);
+	ledred[0] =   0;
+	ledblue[0] =  0;
+	ledgreen[0] = 0;
+}	
 
 void MidleGreen (void)
 {
-	
+		ledred[0] =    0;
+		ledblue[0] =   0;
+		ledgreen[0] =  0;
 	//forward movement
-	unsigned char i =15;
-	unsigned char j =15;
+	unsigned char i = LEDC/2;
+	unsigned char j = LEDC/2;
 	do
 	{	ledred[i] =    0;
 		ledblue[i] =   0;
-		ledgreen[i] =  250;
+		ledgreen[i] =  255;
 		delay_ms(25);
 		
 		ledred[i-1] =  0;
@@ -347,7 +489,7 @@ void MidleGreen (void)
 		
 		ledred[j-1] =    0;
 		ledblue[j-1] =   0;
-		ledgreen[j-1] =  250;
+		ledgreen[j-1] =  255;
 		delay_ms(25);
 		
 		
@@ -359,7 +501,6 @@ void MidleGreen (void)
 		loadWS2812B();
 		
 	} while (i<LEDC);
-	while (j>=1);
 	//disabling last and first LED
 	ledred[0] =  0;
 	ledblue[0] = 0;
@@ -403,85 +544,452 @@ void MidleGreen (void)
 		j++;
 		loadWS2812B();
 		
-	} while (i>15);
-	while (j<14);
+	} while (i>LEDC/2);
+	while (j<LEDC/2);
 	
 	
 	
-	ledred[LEDC - 1] =  0;
-	ledblue[LEDC - 1] = 0;
-	ledgreen[LEDC - 1]= 0;
+	ledred[LEDC/2 + 1] =  0;
+	ledblue[LEDC/2 + 1] = 0;
+	ledgreen[LEDC/2 + 1]= 0;
 	
 	
-	ledred[LEDC] =  0;
-	ledblue[LEDC] = 0;
-	ledgreen[LEDC]= 0;
+	ledred[LEDC/2] =  0;
+	ledblue[LEDC/2] = 0;
+	ledgreen[LEDC/2]= 0;
 	
 }
 
-void moveBlue (void)
+		
+
+void lightningBlue (void)
 {
 	
-	//forward moving
-	unsigned char i = 2;
+	//зажигание
+	unsigned char i = 0;
 	do
-	{	ledred[i] =  0;
+	{	ledred[i] =   0;
 		ledblue[i] =  255;
-		ledgreen[i] =  0;
-		delay_ms(50);
+		ledgreen[i] = 0;
+		delay_ms(30);
+				
 		
-		ledred[i-1] =   0;
-		ledblue[i-1] =  0;
-		ledgreen[i-1] = 0;
-		delay_ms(50);
 		i++;
 		
 		loadWS2812B();
 		
 	} while (i<=LEDC);
 	
-	//back moving
-	i = LEDC;
+	for(int j = 0; j < 5; j++)
+	{
+	//тушение
+		
+	 i = 0;
 	do
-	{	ledred[i-1] =    0;
-		ledblue[i-1] =  255;
-		ledgreen[i-1] =  0;
-		delay_ms(50);
+	{	ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		i++;
+		loadWS2812B();
+	} while (i<=LEDC);
+	delay_ms(30);
+	
+	//зажигание
+	i = 0;
+	do
+	{	ledred[i] =   0;
+		ledblue[i] =  255;
+		ledgreen[i] = 0;
+		//delay_ms(50);
+				
 		
+		i++;
 		
+		loadWS2812B();
+		
+	} while (i<=LEDC);
+	delay_ms(30);
+	
+}
+	//тушение
+	 i = 0;
+	do
+	{	ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		delay_ms(30);
+
+		i++;
+		
+		loadWS2812B();
+		
+	} while (i<=LEDC);
+
+}
+
+
+
+
+volatile void RelightningWhite (void)
+{
+
+	/*зажигание
+	j - яркость
+	i - кол-во диодов
+	*/
+	volatile unsigned char j = 0;
+	do 
+	{
+	
+		volatile unsigned char i = 0;
+		do
+		{	ledred[i] =   j;
+			ledblue[i] =  j;
+			ledgreen[i] = j;
+	    delay_us(50);
+				
+			i++;
+		
+		loadWS2812B();	
+		
+		} while (i<=LEDC);
+		
+	j = j + 10;
+	
+	} while (j<250); 
+
+	//тушение
+	 j = 250;
+	do
+	{
+		
+		volatile unsigned char i = 0;
+		do
+		{	ledred[i] =   j;
+			ledblue[i] =  j;
+			ledgreen[i] = j;
+			delay_us(50);
+			
+			
+			i++;
+			
+			loadWS2812B();
+			
+		} while (i<=LEDC);
+		
+		j = j - 10;
+		
+	} while (j>0);
+	
+	for (int i = 0; i < LEDC; i++)
+	{
 		ledred[i] =   0;
 		ledblue[i] =  0;
 		ledgreen[i] = 0;
-		delay_ms(50);
+		
+
+		loadWS2812B();
+	
+	}
+	
+}
+
+
+void ColorLight (void)
+{
+	unsigned char n = 0;
+	do
+	{
+	//зажигание
+	
+	unsigned char i = 0;
+	unsigned char j = 1;
+	unsigned char k = 2;
+
+	do
+	{	ledred[k] =   0;
+		ledblue[i] =  0;
+		ledgreen[j] = 0;
+		
+		ledred[i] =   255;
+		ledblue[j] =  255;
+		ledgreen[k] = 255;
+		delay_us(100);
+
+		i=i+3;
+		j=j+3;
+		k=k+3;
+
+		loadWS2812B();
+		
+	} while (i<=LEDC);
+
+	i = 0;
+	j = 1;
+	k = 2;
+	
+	do
+	{	ledred[i] =   0;
+		ledblue[j] =  0;
+		ledgreen[k] = 0;
+
+		ledred[j] =   255;
+		ledblue[k] =  255;
+		ledgreen[i] = 255;
+		delay_us(100);
+
+		i=i+3;
+		j=j+3;
+		k=k+3;
+		
+		loadWS2812B();
+		
+	}while (i<=LEDC);
+
+	i = 0;
+	j = 1;
+	k = 2;
+	do
+	{	ledred[j] =   0;
+		ledblue[k] =  0;
+		ledgreen[i] = 0;
+				
+		
+		ledred[k] =   255;
+		ledblue[i] =  255;
+		ledgreen[j] = 255;
+
+		delay_us(100);
+
+		i=i+3;
+		j=j+3;
+		k=k+3;
+
+		loadWS2812B();
+
+	}while (i<=LEDC);
+n++;
+	}while (n<=50);
+	
+	for (int i = 0; i < LEDC; i++)
+	{
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		
+
+		loadWS2812B();
+	
+	}
+	
+}
+
+
+
+
+void flash (void)
+{
+	int i = 0;
+
+do 
+{
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 255;
+		delay_ms(15);
+	
+		ledred[i+32] =   0;
+		ledblue[i+32] =  0;
+		ledgreen[i+32] = 255;
+		delay_ms(15);
+	
+		ledred[i+56] =   0;
+		ledblue[i+56] =  0;
+		ledgreen[i+56] = 255;
+		delay_ms(15);
+		loadWS2812B();
+	i++;
+} while(i < 38);
+	
+	delay_ms(50);
+	i = LEDC;
+	do
+	{			
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+
 		i--;
 		loadWS2812B();
 		
 	} while (i>=1);
 	
-	
-	
-}			
+	for (int i = 0; i < LEDC; i++)
+	{
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		
 
+		loadWS2812B();
+	
+	}
+
+}
+
+
+void slash (void)
+{
+
+	for (int i = 0; i < LEDC; i++)
+	{
+		if ((i==0) || (i==1) || (i==2) || (i==3) || (i==4) || (i==5) || (i==6) || (i==7) || (i==8) || (i==16) || (i==17) || (i==18) || (i==19) || (i==20) || (i==21) || (i==22) || (i==23) || (i==24)
+		|| (i==32) || (i==33) || (i==34) || (i==35) || (i==36) || (i==37) || (i==38) || (i==44) || (i==45) || (i==46) || (i==47) || (i==48) || (i==49) || (i==50) || (i==56) || (i==57) || (i==58) || 
+		(i==59) || (i==60) || (i==64) || (i==65) || (i==66)	|| (i==67) || (i==68) || (i==72) || (i==73) || (i==74) || (i==75) || (i==78) || (i==79) || (i==80) || (i==81) ||   (i==84) || (i==85) || (i==86) 
+		|| (i==87) || (i==89) || (i==90) || (i==91))
+		{
+		ledred[i] =   0;
+		ledblue[i] =  255;
+		ledgreen[i] = 0;
+		}
+		delay_us(60);
+		loadWS2812B();
+	}
+	for (int i = 0; i < LEDC+1; i++)
+	{
+		if ((i==9) || (i==10) || (i==11) || (i==12) || (i==13) || (i==14) || (i==15) || (i==25) || (i==26) || (i==26) || (i==27) || (i==28) || (i==29) || (i==30) || (i==31) || (i==39) || (i==40) || (i==41)
+		|| (i==42) || (i==43) || (i==51) || (i==52) || (i==53) || (i==54) || (i==55) || (i==61) || (i==62) || (i==63) || (i==69) || (i==70) || (i==71) || (i==76) || (i==77) || (i==82) || (i==83) || 
+		(i==88) || (i==92))
+		{
+		ledred[i] =   255;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		}
+		delay_us(60);
+		loadWS2812B();
+	}
+		
+	
+	for (int i = 0; i < LEDC; i++)
+	{
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		
+
+		loadWS2812B();
+	
+	}
+	
+	
+	
+	for (int i = 0; i < LEDC; i++)
+	{
+		if ((i==0) || (i==1) || (i==2) || (i==3) || (i==4) || (i==5) || (i==6) || (i==7) || (i==8) || (i==16) || (i==17) || (i==18) || (i==19) || (i==20) || (i==21) || (i==22) || (i==23) || (i==24)
+		|| (i==32) || (i==33) || (i==34) || (i==35) || (i==36) || (i==37) || (i==38) || (i==44) || (i==45) || (i==46) || (i==47) || (i==48) || (i==49) || (i==50) || (i==56) || (i==57) || (i==58) || 
+		(i==59) || (i==60) || (i==64) || (i==65) || (i==66)	|| (i==67) || (i==68) || (i==72) || (i==73) || (i==74) || (i==75) || (i==78) || (i==79) || (i==80) || (i==81) ||   (i==84) || (i==85) || (i==86) 
+		|| (i==87) || (i==89) || (i==90) || (i==91))
+		{
+		ledred[i] =   255;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		}
+		delay_us(60);
+		loadWS2812B();
+	}
+	for (int i = 0; i < LEDC+1; i++)
+	{
+		if ((i==9) || (i==10) || (i==11) || (i==12) || (i==13) || (i==14) || (i==15) || (i==25) || (i==26) || (i==26) || (i==27) || (i==28) || (i==29) || (i==30) || (i==31) || (i==39) || (i==40) || (i==41)
+		|| (i==42) || (i==43) || (i==51) || (i==52) || (i==53) || (i==54) || (i==55) || (i==61) || (i==62) || (i==63) || (i==69) || (i==70) || (i==71) || (i==76) || (i==77) || (i==82) || (i==83) || 
+		(i==88) || (i==92))
+		{
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 255;
+		}
+		delay_us(60);
+		loadWS2812B();
+	}
+	
+	for (int i = 0; i < LEDC; i++)
+	{
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		
+
+		loadWS2812B();
+	
+	}
+	
+	
+	
+	
+		for (int i = 0; i < LEDC; i++)
+	{
+		if ((i==0) || (i==1) || (i==2) || (i==3) || (i==4) || (i==5) || (i==6) || (i==7) || (i==8) || (i==16) || (i==17) || (i==18) || (i==19) || (i==20) || (i==21) || (i==22) || (i==23) || (i==24)
+		|| (i==32) || (i==33) || (i==34) || (i==35) || (i==36) || (i==37) || (i==38) || (i==44) || (i==45) || (i==46) || (i==47) || (i==48) || (i==49) || (i==50) || (i==56) || (i==57) || (i==58) || 
+		(i==59) || (i==60) || (i==64) || (i==65) || (i==66)	|| (i==67) || (i==68) || (i==72) || (i==73) || (i==74) || (i==75) || (i==78) || (i==79) || (i==80) || (i==81) ||   (i==84) || (i==85) || (i==86) 
+		|| (i==87) || (i==89) || (i==90) || (i==91))
+		{
+		ledred[i] =   255;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		}
+		delay_us(60);
+		loadWS2812B();
+	}
+	for (int i = 0; i < LEDC+1; i++)
+	{
+		if ((i==9) || (i==10) || (i==11) || (i==12) || (i==13) || (i==14) || (i==15) || (i==25) || (i==26) || (i==26) || (i==27) || (i==28) || (i==29) || (i==30) || (i==31) || (i==39) || (i==40) || (i==41)
+		|| (i==42) || (i==43) || (i==51) || (i==52) || (i==53) || (i==54) || (i==55) || (i==61) || (i==62) || (i==63) || (i==69) || (i==70) || (i==71) || (i==76) || (i==77) || (i==82) || (i==83) || 
+		(i==88) || (i==92))
+		{
+		ledred[i] =   0;
+		ledblue[i] =  255;
+		ledgreen[i] = 0;
+		}
+		delay_us(60);
+		loadWS2812B();
+	}
+	
+	for (int i = 0; i < LEDC; i++)
+	{
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+		
+
+		loadWS2812B();
+	
+	}
+	
+		
+	
+}
 
 
 int main(void)
 {
   setup_leds();   																	/* LED initialization */
 	DWT_Init();																				/* Delay initialization */
- //__enable_irq();
   while (1)  
 	{
 
-		/*
-		SetOutBit;											
-		delay_ms(500);
-		ClearOutBit; */  														/* Turn of LED */
-		//delay_ms(500);
 		
-		//CometWhite();
+		CometWhite();
+		MidleGreen();
 		moveRed();
+		lightningBlue();
+		moveWhite();
+		RelightningWhite();
 		moveBlue();
-		//MidleGreen();
+		ColorLight();
+		flash();
+		flash();
+		moveGreen();
+		slash();
+		slash();
  
   }
 }

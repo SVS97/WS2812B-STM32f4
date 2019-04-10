@@ -1,8 +1,10 @@
 #include "stm32f4xx.h"
+#include "stm32f4xx_rcc.h"
+#include "stm32f4xx_gpio.h"
 #include <stdlib.h>
 
 
-#define LED_PWM (1 << 15) 		/* port D, pin 15 */
+#define LED_PWM (1 << 8) 		/* port D, pin 15 */
 #define LEDC			93					// Should be 1 or greater
 #define PORTOUT			GPIOD				// port for WS2812B
 #define ClearOutBit		(PORTOUT->ODR = 0); //0 to output
@@ -20,13 +22,53 @@ unsigned char ledred[LEDC+1] ;		// array of red
 unsigned char ledblue[LEDC+1] ;		// array of blue
 unsigned char ledgreen[LEDC+1];		// array of green
 
+const enum state {							// State of indication		
+	OFF = 0,									
+	MOVE,										
+	SLASH,
+	COLOR,
+	LIGHT,
+} state;
+
+volatile enum state STATE = OFF;	
 
 static inline void setup_leds(void)
 {
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;    				/* Enable clocking of port D (PWM LED) */
-    PORTOUT->MODER |=  GPIO_MODER_MODER15_0;    		/* Enable high level for LED 					 */
+    PORTOUT->MODER |=  GPIO_MODER_MODER8_0;    		/* Enable high level for LED 					 */
+}
+void btn_init(void)
+{
+	//Button
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+	//RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	
+	GPIO_InitTypeDef b;
+	b.GPIO_Mode = GPIO_Mode_IN;
+	b.GPIO_Speed = GPIO_Speed_2MHz;
+	b.GPIO_OType = GPIO_OType_PP;
+	b.GPIO_PuPd = GPIO_PuPd_UP;
+
+GPIO_Init(GPIOA, &b);
 }
 
+int button_state(void)
+{
+	if(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_11)) {
+      STATE = MOVE;
+		return 1;
+    }
+	if(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_6)) {
+      STATE = SLASH;
+		return 1;
+    }
+		
+	if(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_9)) {
+      STATE = OFF;
+			return 1;
+    }
+	return 0;
+}
 
 void DWT_Init(void)
 {
@@ -223,6 +265,18 @@ void loadWS2812B (void)
 
 
 
+void clear_LED()
+{
+for (int i = 0; i < LEDC; i++)
+	{
+		ledred[i] =   0;
+		ledblue[i] =  0;
+		ledgreen[i] = 0;
+
+		loadWS2812B();
+	}
+}
+
 void CometWhite (void)
 {
 	
@@ -281,7 +335,8 @@ void CometWhite (void)
 
 void moveRed (void)		
 {
-	
+		int f = 0;
+		clear_LED();
 		//forward movement
 		unsigned char i = 0;
 		do
@@ -297,7 +352,9 @@ void moveRed (void)
 			i++;
 			
 			loadWS2812B();
-			
+			f = button_state();
+			if (f == 1)
+				break;
 		} while (i<=LEDC);
 		
 		//back movement
@@ -315,13 +372,15 @@ void moveRed (void)
 			delay_ms(15);
 			i--;
 			loadWS2812B();
-			
+			f = button_state();
+			if (f == 1)
+				break;
 		} while (i>0);
-	
+	/*
 	ledred[0] =      0;
 	ledblue[0] =     0;
 	ledgreen[0] =    0;
-	
+	*/
 }
 
 void moveBlue (void)
@@ -793,18 +852,18 @@ void flash (void)
 
 do 
 {
-		ledred[i] =   0;
-		ledblue[i] =  0;
+		ledred[i] =   255;
+		ledblue[i] =  255;
 		ledgreen[i] = 255;
 		delay_ms(15);
 	
-		ledred[i+32] =   0;
-		ledblue[i+32] =  0;
+		ledred[i+32] =   255;
+		ledblue[i+32] =  255;
 		ledgreen[i+32] = 255;
 		delay_ms(15);
 	
-		ledred[i+56] =   0;
-		ledblue[i+56] =  0;
+		ledred[i+56] =   255;
+		ledblue[i+56] =  255;
 		ledgreen[i+56] = 255;
 		delay_ms(15);
 		loadWS2812B();
@@ -840,7 +899,7 @@ do
 
 void slash (void)
 {
-
+	int f = 0;
 	for (int i = 0; i < LEDC; i++)
 	{
 		if ((i==0) || (i==1) || (i==2) || (i==3) || (i==4) || (i==5) || (i==6) || (i==7) || (i==8) || (i==16) || (i==17) || (i==18) || (i==19) || (i==20) || (i==21) || (i==22) || (i==23) || (i==24)
@@ -852,6 +911,9 @@ void slash (void)
 		ledblue[i] =  255;
 		ledgreen[i] = 0;
 		}
+		f = button_state();
+			if (f == 1)
+				break;
 		delay_us(60);
 		loadWS2812B();
 	}
@@ -865,24 +927,21 @@ void slash (void)
 		ledblue[i] =  0;
 		ledgreen[i] = 0;
 		}
+		f = button_state();
+			if (f == 1)
+				break;
 		delay_us(60);
 		loadWS2812B();
 	}
-		
-	
+
 	for (int i = 0; i < LEDC; i++)
 	{
 		ledred[i] =   0;
 		ledblue[i] =  0;
 		ledgreen[i] = 0;
-		
-
 		loadWS2812B();
-	
 	}
-	
-	
-	
+
 	for (int i = 0; i < LEDC; i++)
 	{
 		if ((i==0) || (i==1) || (i==2) || (i==3) || (i==4) || (i==5) || (i==6) || (i==7) || (i==8) || (i==16) || (i==17) || (i==18) || (i==19) || (i==20) || (i==21) || (i==22) || (i==23) || (i==24)
@@ -894,6 +953,9 @@ void slash (void)
 		ledblue[i] =  0;
 		ledgreen[i] = 0;
 		}
+		f = button_state();
+			if (f == 1)
+				break;
 		delay_us(60);
 		loadWS2812B();
 	}
@@ -907,6 +969,9 @@ void slash (void)
 		ledblue[i] =  0;
 		ledgreen[i] = 255;
 		}
+		f = button_state();
+			if (f == 1)
+				break;
 		delay_us(60);
 		loadWS2812B();
 	}
@@ -921,10 +986,7 @@ void slash (void)
 		loadWS2812B();
 	
 	}
-	
-	
-	
-	
+
 		for (int i = 0; i < LEDC; i++)
 	{
 		if ((i==0) || (i==1) || (i==2) || (i==3) || (i==4) || (i==5) || (i==6) || (i==7) || (i==8) || (i==16) || (i==17) || (i==18) || (i==19) || (i==20) || (i==21) || (i==22) || (i==23) || (i==24)
@@ -936,6 +998,9 @@ void slash (void)
 		ledblue[i] =  0;
 		ledgreen[i] = 0;
 		}
+		f = button_state();
+			if (f == 1)
+				break;
 		delay_us(60);
 		loadWS2812B();
 	}
@@ -949,6 +1014,9 @@ void slash (void)
 		ledblue[i] =  255;
 		ledgreen[i] = 0;
 		}
+		f = button_state();
+			if (f == 1)
+				break;
 		delay_us(60);
 		loadWS2812B();
 	}
@@ -969,27 +1037,47 @@ void slash (void)
 }
 
 
+
+
 int main(void)
 {
   setup_leds();   																	/* LED initialization */
 	DWT_Init();																				/* Delay initialization */
-  while (1)  
-	{
+	btn_init();
 
-		
-		CometWhite();
+  while (1)  
+	{		
+
+		button_state();
+		switch (STATE) {
+			case MOVE :
+				moveRed();
+				break;
+			case OFF:
+				clear_LED();
+				clear_LED();
+				break;
+			case SLASH:
+				slash();
+				break;
+			default :
+				STATE = OFF;
+			}
+
+		/*CometWhite();
 		MidleGreen();
 		moveRed();
 		lightningBlue();
 		moveWhite();
 		RelightningWhite();
 		moveBlue();
-		ColorLight();
-		flash();
-		flash();
-		moveGreen();
+		ColorLight();*/
+		//flash();
+		//flash();
+		/*moveGreen();
 		slash();
-		slash();
+		slash();*/
  
   }
 }
+
